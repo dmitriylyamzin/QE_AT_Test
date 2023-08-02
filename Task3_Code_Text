@@ -1,0 +1,65 @@
+package com;
+
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        // Ввод данных (предполагается, что все значения целые)
+        Scanner in = new Scanner(System.in);
+        int N = 0;
+        try {
+            N = Integer.parseInt(in.nextLine());
+        } catch (NumberFormatException ex) {
+            System.out.println("Wrong input format\n" + ex.getMessage());
+            System.exit(-1);
+        }
+
+        // Вывод для N <= 0
+        if (N < 0) {
+            System.out.println("N must be positive!");
+            System.exit(-1);
+        }
+        if (N == 0) {
+            System.out.println(0);
+            System.exit(0);
+        }
+
+        // Получение массива с рекомендованными значениями оптической силы линзы для каждого циклопа
+        int[] recommendations = new int[N];
+        for (int i = 0; i < N; i++) {
+            try {
+                recommendations[i] = Integer.parseInt(in.nextLine());
+            } catch (NumberFormatException ex) {
+                System.out.println("Wrong input format\n" + ex.getMessage());
+                System.exit(-1);
+            }
+        }
+
+        // Для получения ответа необходимо отсортировать полученный массив и пройти по нему от начала до конца
+        // При проходе циклопы с различными рекомендованными значениями оптической силы нужной им линзы объединяются в пары
+        // Это происходит, когда находятся два циклопа, которым подойдут линзы одинаковой силы
+        // При N > 1 количество необходимых пар линз изначально устанавливается равным 1
+        // Также создаётся переменная, обозначающая отсутствия или наличие циклопа, для которого ещё может быть подобрана пара в текущий момент времени
+        Arrays.sort(recommendations);
+        int countOfPairs = 1;
+        boolean waitFlag = true;
+
+        // Проход по массиву, начиная со второго элемента, пи вычисление ответа
+        for (int i = 1; i < N; i++) {
+            if (recommendations[i] - recommendations[i - 1] <= 2) {
+                if (!waitFlag) {
+                    countOfPairs++;
+                    waitFlag = true;
+                } else {
+                    waitFlag = false;
+                }
+            } else {
+                countOfPairs++;
+                waitFlag = true;
+            }
+        }
+        System.out.println(countOfPairs);
+    }
+}
