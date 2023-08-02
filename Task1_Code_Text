@@ -1,0 +1,42 @@
+package com;
+
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        // Ввод числа X
+        Scanner in = new Scanner(System.in);
+        System.out.print("Enter X: ");
+        double X = 0;
+        try {
+            X = Double.parseDouble(in.nextLine());
+        } catch (NumberFormatException ex) {
+            // Если не было введено целое или вещественное число, выдается сообщение ошибке
+            System.out.println("Wrong input format\n" + ex.getMessage());
+            System.exit(-1);
+        }
+
+        // Если было введено число, меньшее 2, выводится 0.
+        if (X < 2) {
+            System.out.println(0);
+        }
+
+        // Поиск простых чисел, не превышающих X, производится с помощью решета Эратосфена
+        // Параллельно считается необходимая сумма
+        int sum = 0;
+        boolean[] e_sieve = new boolean[(int) (Math.floor(X) + 1)];
+        for (int k = 2; k <= X; k++) {
+            e_sieve[k] = true;
+        }
+        for (int i = 2; i <= X; i++) {
+            if (e_sieve[i]) {
+                for (int j = 2 * i; j <= X; j += i) {
+                    e_sieve[j] = false;
+                }
+                sum += i;
+            }
+        }
+        System.out.println(sum);
+    }
+}
